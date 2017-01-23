@@ -4,30 +4,43 @@
 	// style comments are not allowed!
 */
 
-/*TODO: modify these in an ISR*/
-volatile unsigned short calibrationEnabled = 0;
-volatile unsigned short algorithmEnabled = 1;
+#include "common.h"
+#include "mode_of_operation.h"
+#include "mic_input.h"
+#include "transducer_output.h"
+
 
 void runCalibration()
 {
-    /*TODO: populate calibration data structures */
+    /*TODO: populate calibration data structures.
+	NOTE: if using hardcoded data, then this function returns immediately.
+	*/
 }
 
 void runMainAlgorithm()
 {
-    /*Get mic data */
-    /*TODO: (call to separate file which handles conversion)*/
+    /*Get mic input */
+    /*TODO: call to mic_data.h 
+		returns an array of floats, 1 float per mic
+		this is assuming that reading McBSP buffered input takes minimal clock cycles, otherwise we may need to process mic one by one
+	*/
+		
 
-    /*Perform signal processing in frequency domain*/
+    /*Perform signal processing*/
+	/*
+		returns array of floats, 1 float per transducer
+	*/
 
     /*Write to transducers*/
+		/* call to transducer_output.h */
+
 }
 
 int main()
 {
     /*Calibration switch must be enabled at power-on to calibrate
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
-    if(calibrationEnabled) 
+    if(isCalibrationEnabled()) 
     {
         runCalibration();
         /*TODO: perhaps have a pause here? */
@@ -37,7 +50,7 @@ int main()
     {
         /*wait for algorithm to be enabled (controlled by board switch)
         user controls whether regular headphones listening mode, or antivoice mode */
-        if(algorithmEnabled)
+        if(isAlgorithmEnabled())
         {
             runMainAlgorithm(); 
         }

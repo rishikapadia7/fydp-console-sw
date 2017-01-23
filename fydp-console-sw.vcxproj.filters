@@ -19,4 +19,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mode_of_operation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transducer_output.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mic_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main_algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
