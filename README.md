@@ -17,3 +17,8 @@ There are no other .c files in this repo.
 
 
 gcc main.c -ansi -o main
+
+
+See below for helpful links to sw development with TI board:
+
+https://docs.google.com/document/d/1k4nRw4o-ZgncXD56vZib3MPRxPhCtg2E16HcLDE5ESY/edit
