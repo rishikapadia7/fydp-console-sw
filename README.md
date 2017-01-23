@@ -14,3 +14,6 @@ The only application file is main.c.  All other development is done within heade
 to simplify the process of not having to create a complicated makefile and to
 be able to work outside of windows easily via command line.
 There are no other .c files in this repo.
+
+
+gcc main.c -o main
