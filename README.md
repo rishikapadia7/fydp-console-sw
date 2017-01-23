@@ -1,22 +1,16 @@
 # fydp-console-sw
 
-This is a visual studio community 2015 project.  Download visual studio community 2015 from:
+This is a visual studio express 2012 project.  Download visual studio express 2012 from (free registration key with MS account):
 
-https://imagine.microsoft.com/en-us/Catalog/Product/101
+https://www.microsoft.com/en-ca/download/details.aspx?id=34673
 
-http://www.kunal-chowdhury.com/2015/07/download-visualstudio-2015.html#F2rapsBJjshsO9zx.97
+The visual studio project has been set up with PARTIAL ANSI C compatibility (double slash comments still work),
+but other C99 features do not.
+Visual studio 2013 and higher begin to use C99, therefore this is the best for our purposes on windows.
 
-
-The visual studio project has been set up with ANSI C compatibility, therefore double slash comments
-would generate compile errors as expected on the TI C6748 board compiler in Code Composer Studio. 
+Forum discussion: http://www.cplusplus.com/forum/general/145334/
 
 The only application file is main.c.  All other development is done within header files
-to simplify the process of not having to create a complicated makefile and so that
-or can even easily work by compiling via command line without the need of visual studio.
+to simplify the process of not having to create a complicated makefile and to
+be able to work outside of windows easily via command line.
 There are no other .c files in this repo.
-
-
-
-
-
-
