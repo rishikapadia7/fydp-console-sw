@@ -11,9 +11,9 @@ Visual studio 2013 and higher begin to use C99, therefore this is the best for o
 Forum discussion: http://www.cplusplus.com/forum/general/145334/
 
 The only application file is main.c.  All other development is done within header files
-to simplify the process of not having to create a complicated makefile and to
+to not have a complicated makefile and to
 be able to work outside of windows easily via command line.
 There are no other .c files in this repo.
 
 
-gcc main.c -o main
+gcc main.c -ansi -o main
