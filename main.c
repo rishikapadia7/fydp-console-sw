@@ -24,15 +24,21 @@ void runMainAlgorithm()
 		returns an array of floats, 1 float per mic
 		this is assuming that reading McBSP buffered input takes minimal clock cycles, otherwise we may need to process mic one by one
 	*/
-		
 
-    /*Perform signal processing*/
-	/*
-		returns array of floats, 1 float per transducer
+    /*Perform signal processing
+	- input signal windowing
+	- sliding fft
+	- memcpy to a signal to operate on
+	- magnitude adjustment
+	- phase adjustment
+		- feedback elimination (this will be part of magnitude and phase adjustment and may involve subtraction and not just multiplication)
+		- voice obfuscation (same, but may involve addition and subtraction as well)
+	- ifft (may or may not be able to use previous signal data to reduce computation - research)
+	- inverse windowing (to counteract initial input windowing)
 	*/
-
+	
     /*Write to transducers*/
-		/* call to transducer_output.h */
+		/* call to transducer_output.h, takes floats as input */
 
 }
 
@@ -58,6 +64,7 @@ int main()
         {
             /*sleep to save power if possible / easy? */
         }
+		/*NOTE: we may split up isAlgorithmEnabled into voiceObfuscationEnabled and ancEnabled as they are 2 different modes of operatoin*/
     }
     
     return 0;

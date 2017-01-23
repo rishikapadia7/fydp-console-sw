@@ -32,8 +32,5 @@
     <ClInclude Include="mic_input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main_algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
