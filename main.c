@@ -5,6 +5,7 @@
 */
 
 #include "common.h"
+#include "dsplib674x.h"
 #include "mode_of_operation.h"
 #include "mic_input.h"
 #include "transducer_output.h"

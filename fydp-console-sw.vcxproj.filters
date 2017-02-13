@@ -32,5 +32,8 @@
     <ClInclude Include="mic_input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dsplib674x.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
