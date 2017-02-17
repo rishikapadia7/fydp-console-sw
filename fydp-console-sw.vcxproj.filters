@@ -35,5 +35,8 @@
     <ClInclude Include="dsplib674x.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fft_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,8 @@
 #define DSPLIB674X_H
 
 /*
+	Console simulation only.  Do not include on board source files.
+
 	This file contains identical function prototypes to those found in DSPLIB.
 	The implementations in here are used for simulation only.
 	Note: the filename dslib674x.h is the same filename that is included in
@@ -74,7 +76,7 @@ unsigned int _bitr(unsigned int a)
     return(b);
 }
 
-void DSPF_sp_fftSPxSP_cn (int N, float *ptr_x, float *ptr_w, float *ptr_y,
+void DSPF_sp_fftSPxSP(int N, float *ptr_x, float *ptr_w, float *ptr_y,
     unsigned char *brev, int n_min, int offset, int n_max)
 {
 
@@ -300,7 +302,7 @@ void DSPF_sp_fftSPxSP_cn (int N, float *ptr_x, float *ptr_w, float *ptr_y,
 /*                                                                         */
 /* ======================================================================= */
 
-void DSPF_sp_ifftSPxSP_cn (int N, float *ptr_x, float *ptr_w, float *ptr_y,
+void DSPF_sp_ifftSPxSP(int N, float *ptr_x, float *ptr_w, float *ptr_y,
     unsigned char *brev, int n_min, int offset, int n_max)
 {
 

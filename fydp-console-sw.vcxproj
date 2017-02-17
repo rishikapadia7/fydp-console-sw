@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClInclude Include="common.h" />
     <ClInclude Include="dsplib674x.h" />
+    <ClInclude Include="fft_wrap.h" />
     <ClInclude Include="mic_input.h" />
     <ClInclude Include="mode_of_operation.h" />
     <ClInclude Include="transducer_output.h" />
