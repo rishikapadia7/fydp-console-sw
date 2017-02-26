@@ -8,16 +8,15 @@
 	This file contains wrapper functions for FFT and iFFT for easily calling DSPLIB functions.
 */
 
-/* These are defines from the sample code */
-#define MAXN (FFT_SIZE)
-/* M is double FFT_SIZE to account for real-part and imaginary part of complex number */
-#define M    (2*MAXN)
-/* PAD is used for data alignment reasons */
-#define PAD  (16)
+#ifdef _TMS320C6X
+#pragma DATA_ALIGN(brev, 8);
+#pragma DATA_ALIGN(w, 8);
+#endif /* _TMS320C6X */
 
 /* Contains the twiddle factors used by the FFT radix algorithm. */
+/* It's 2 * PAD, here because pad once for real, and once for imag. values */
 float w[M + 2 * PAD];
-/* ptr_w will skip beyond the array padding */
+/* ptr_w will skip beyond the array padding and give useful aspect*/
 float *const ptr_w = w + PAD;
 
 /* brev is used by this specific butterfly radix algorithm for value lookup */
@@ -32,7 +31,6 @@ unsigned char brev[64] = {
     0x7, 0x27, 0x17, 0x37, 0xf, 0x2f, 0x1f, 0x3f
 };
 
-bool_t twiddle_generated = false;
 int rad = 2;
 
 
@@ -90,6 +88,26 @@ void generate_twiddle(int N, float * ptr_w)
     tw_gen (ptr_w, N);
 }
 
+void fft_init()
+{
+	tw_gen(ptr_w, FFT_SIZE);
+
+	/* Clear data structures and initialize usable (data aligned) array ptrs. */
+	unsigned int i;
+	for(i = 0; i < AUDIO_CHANNEL_COUNT; i++)
+	{
+		memset(audio_data[i].x_padded, 0, sizeof(audio_data[i].x_padded));
+		memset(audio_data[i].X_padded, 0, sizeof(audio_data[i].X_padded));
+		memset(audio_data[i].Y_padded, 0, sizeof(audio_data[i].Y_padded));
+		memset(audio_data[i].y_padded, 0, sizeof(audio_data[i].y_padded));
+		audio_data[i].x = audio_data[i].x_padded + PAD;
+		audio_data[i].X = audio_data[i].X_padded + PAD;
+		audio_data[i].Y = audio_data[i].Y_padded + PAD;
+		audio_data[i].y = audio_data[i].y_padded + PAD;
+	}
+}
+
+
 /*
 	Args:
 		ptr_x is input array
@@ -101,14 +119,8 @@ void generate_twiddle(int N, float * ptr_w)
 */
 void fft_wrap(float *ptr_x, float *ptr_w, float *ptr_y)
 {
-	int N = FFT_SIZE;
-	if(!twiddle_generated)
-	{
-		tw_gen(ptr_w, N);
-		twiddle_generated = true;
-	}
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
-	DSPF_sp_fftSPxSP (N, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, N);
+	DSPF_sp_fftSPxSP (FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, N);
 }
 
 
@@ -121,13 +133,6 @@ void fft_wrap(float *ptr_x, float *ptr_w, float *ptr_y)
 
 void ifft_wrap(int N, float *ptr_x, float * ptr_w, float *ptr_y)
 {
-	int N = FFT_SIZE;
-	if(!twiddle_generated)
-	{
-		tw_gen(ptr_w, N);
-		twiddle_generated = true;
-	}
-	
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
 	DSPF_sp_ifftSPxSP(N, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, N);
 }
