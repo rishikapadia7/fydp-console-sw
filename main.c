@@ -20,16 +20,23 @@ void runCalibration()
 
 void runMainAlgorithm()
 {
-    /*Get mic input */
-    /*TODO: call to mic_data.h 
-		returns an array of floats, 1 float per mic
+	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
+
+	/*Get mic input */
+    /*	returns an array of floats, 1 float per mic
 		this is assuming that reading McBSP buffered input takes minimal clock cycles, otherwise we may need to process mic one by one
 	*/
+	get_mic_data_float(mic_data_float);
+
+	/*  
+	- append to signal to operate on (allocations are done in common.h) ... create new functions in fft_wrap.h which adds mic_data_float
+		addNewMicData(mic_data_float);
+	*/
+
 
     /*Perform signal processing
 	- input signal windowing
-	- sliding fft
-	- memcpy to a signal to operate on
+	
 	- magnitude adjustment
 	- phase adjustment
 		- feedback elimination (this will be part of magnitude and phase adjustment and may involve subtraction and not just multiplication)

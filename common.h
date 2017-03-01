@@ -5,11 +5,8 @@
 #include "stdio.h"
 #include "string.h"
 #include "math.h"
-
-typedef unsigned char bool_t;
-#define FALSE 0
-#define TRUE 1
-
+#include "stdbool.h"
+#include "stdint.h"
 
 /* Global Constants */
 #define FFT_SIZE 128 /* this is positive and neg freq combined, number of bins */
@@ -20,7 +17,7 @@ typedef enum audio_channel {
 	AUDIO_CHANNEL_COUNT
 } audio_channel_t;
 
-float mic_data_float[AUDIO_CHANNEL_COUNT]; /* contains newest mic samples as float */
+
 
 
 
