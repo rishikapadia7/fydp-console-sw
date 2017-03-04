@@ -2,31 +2,27 @@
 #define MIC_INPUT_H
 
 #include "common.h"
+#include "mock_data.h"
 
-typedef uint16_t rawmic_t;
 
 /* Obtains raw mic sample as unsigned integer for the mentioned channel */
 rawmic_t get_rawmic_data(audio_channel_t ch)
 {
-	if(ch == LEFT)
-	{
-		return 0; /* TODO: replace with actual data */
-	}
-	else
-	{
-		return 1; /* TODO: replace with actual data */
-	}
+	/* MOCK: replace with actual data coming from mic*/
+	return	mock_get_mic_input(ch);
 }
 
 float convert_rawmic_to_float(rawmic_t data)
 {
-	/* TODO (maybe): there may be some scaling required for it to be valid FFT input
+	/* scaling required for it to be valid FFT input
 		http://stackoverflow.com/questions/15087668/how-to-convert-pcm-samples-in-byte-array-as-floating-point-numbers-in-the-range
 		This mentions after the cast, divide by uint32_t MAX , and then when about to create speaker output should multiply back.
-		However, this may not be necessary as the type-casting could be sufficient for our purposes.
-			http://stackoverflow.com/questions/6281206/type-coercion-in-c-unsigned-int-to-float
+		Also verified matlab audioread function uses similar strategy, our MATLAB simulation used floats in the range of -1 to 1 (not integer).
 	*/
-	return (float) data;
+	float f;
+	/* We subtract 1 to make it zero-centered as opposed to 1-centered */
+	f = ((float) data) /((float) RAWMIC_MAX_VAL) - 1;
+	return f;
 }
 
 

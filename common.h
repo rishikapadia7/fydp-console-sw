@@ -17,8 +17,11 @@ typedef enum audio_channel {
 	AUDIO_CHANNEL_COUNT
 } audio_channel_t;
 
+typedef uint16_t rawmic_t;
+#define RAWMIC_MAX_VAL (0xFFFF)
 
-
+typedef uint16_t transducerout_t;
+#define TRANSDUCEROUT_MAX_VAL (0xFFFF)
 
 
 /*** Data structures that are used by FFT and iFFT ***/
