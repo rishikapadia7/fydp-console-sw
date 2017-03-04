@@ -9,6 +9,8 @@
 #include "mode_of_operation.h"
 #include "mic_input.h"
 #include "transducer_output.h"
+#include "fft_wrap.h"
+#include "signal_processing.h"
 
 
 void runCalibration()
@@ -21,6 +23,7 @@ void runCalibration()
 void runMainAlgorithm()
 {
 	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
+	unsigned int ch;
 
 	/*Get mic input */
     /*	returns an array of floats, 1 float per mic
@@ -28,10 +31,24 @@ void runMainAlgorithm()
 	*/
 	get_mic_data_float(mic_data_float);
 
-	/*  
-	- append to signal to operate on (allocations are done in common.h) ... create new functions in fft_wrap.h which adds mic_data_float
-		addNewMicData(mic_data_float);
-	*/
+	/* append to working signal to operate on (signal is allocated in common.h) */
+	add_new_mic_data(mic_data_float);
+
+	
+	for(ch = 0; ch < AUDIO_CHANNEL_COUNT; ch++)
+	{
+		fft_wrap(audio_data[ch].x,audio_data[ch].X);
+		/* TODO: perform some signal processing here */
+
+		/* TODO: add benchmarking */
+
+		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
+		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
+		/* TODO: validate x == y approximately ... and show error if not*/
+	}
+	
+	/* TODO: show that mic input and transducer out are roughly the same, and what is the error as a result of float - integer scaling */
+	
 
 
     /*Perform signal processing
@@ -59,6 +76,8 @@ int main()
         runCalibration();
         /*TODO: perhaps have a pause here? */
     }
+
+	fft_wrap_init();
     
     while(1)
     {

@@ -14,7 +14,11 @@
 #endif /* _TMS320C6X */
 
 /* Contains the twiddle factors used by the FFT radix algorithm. */
-/* It's 2 * PAD, here because pad once for real, and once for imag. values */
+/* It's 2 * PAD, here because pad once for real, and once for imag. values 
+	ptr_w is array of twiddle factors used by algorithm
+		NOTE: this memory address should never be cleared after initialized
+		This is done so that twiddle factors are not computed over and over again
+*/
 float w[M + 2 * PAD];
 /* ptr_w will skip beyond the array padding and give useful aspect*/
 float *const ptr_w = w + PAD;
@@ -88,12 +92,13 @@ void generate_twiddle(int N, float * ptr_w)
     tw_gen (ptr_w, N);
 }
 
-void fft_init()
+void fft_wrap_init()
 {
+	unsigned int i;
 	tw_gen(ptr_w, FFT_SIZE);
 
 	/* Clear data structures and initialize usable (data aligned) array ptrs. */
-	unsigned int i;
+	
 	for(i = 0; i < AUDIO_CHANNEL_COUNT; i++)
 	{
 		memset(audio_data[i].x_padded, 0, sizeof(audio_data[i].x_padded));
@@ -109,32 +114,30 @@ void fft_init()
 
 
 /*
+	fft_wrap_init() must be called before calling this function for the first time.
 	Args:
 		ptr_x is input array
-		ptr_w is array of twiddle factors used by algorithm
-			NOTE: this memory address should never be cleared after initialized
-			This is done so that twiddle factors are not computed over and over again
 		ptr_y is output array
 
 */
-void fft_wrap(float *ptr_x, float *ptr_w, float *ptr_y)
+void fft_wrap(float *ptr_x, float *ptr_y)
 {
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
-	DSPF_sp_fftSPxSP (FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, N);
+	DSPF_sp_fftSPxSP (FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, FFT_SIZE);
 }
 
 
 /*
 	Args:
 		ptr_x contains frequency domain information.
-		ptr_w is array of twiddle factors used by algorithm
 		ptr_y is where the inverse will be placed in time domain.
 */
 
-void ifft_wrap(int N, float *ptr_x, float * ptr_w, float *ptr_y)
+void ifft_wrap(float *ptr_x, float *ptr_y)
 {
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
-	DSPF_sp_ifftSPxSP(N, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, N);
+	DSPF_sp_ifftSPxSP(FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, FFT_SIZE);
 }
 
 #endif /* FFT_WRAP_H */
+

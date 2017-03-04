@@ -1,7 +1,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-/* This file contains all general includes and type declarations, as well as global configuraiton data */
+/* This file contains all general includes and type declarations, as well as global configuration data.
+	It is safe to use for both TI board and in console simulation.
+*/
 #include "stdio.h"
 #include "string.h"
 #include "math.h"

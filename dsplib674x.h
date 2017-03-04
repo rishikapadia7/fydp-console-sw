@@ -16,7 +16,7 @@
 #include "common.h"
 
 /*
-	copies a specified number of data words from input array x to output array y.
+	copies n data words (floats) from input array x to output array y.
 */
 void DSPF_sp_blk_move(const float * x, float * y, const int n)
 {
