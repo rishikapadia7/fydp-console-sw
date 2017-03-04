@@ -38,5 +38,17 @@
     <ClInclude Include="fft_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stdint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdbool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mock_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="signal_processing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

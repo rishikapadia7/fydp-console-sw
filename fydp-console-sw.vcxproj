@@ -92,7 +92,11 @@
     <ClInclude Include="dsplib674x.h" />
     <ClInclude Include="fft_wrap.h" />
     <ClInclude Include="mic_input.h" />
+    <ClInclude Include="mock_data.h" />
     <ClInclude Include="mode_of_operation.h" />
+    <ClInclude Include="signal_processing.h" />
+    <ClInclude Include="stdbool.h" />
+    <ClInclude Include="stdint.h" />
     <ClInclude Include="transducer_output.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
