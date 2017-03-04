@@ -23,7 +23,7 @@ void runCalibration()
 void runMainAlgorithm()
 {
 	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
-	unsigned int ch;
+	unsigned int ch, i;
 
 	/*Get mic input */
     /*	returns an array of floats, 1 float per mic
@@ -45,6 +45,8 @@ void runMainAlgorithm()
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
 		/* TODO: validate x == y approximately ... and show error if not*/
+
+
 	}
 	
 	/* TODO: show that mic input and transducer out are roughly the same, and what is the error as a result of float - integer scaling */

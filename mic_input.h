@@ -2,7 +2,7 @@
 #define MIC_INPUT_H
 
 #include "common.h"
-#include "mock_data.h"
+#include "mock.h"
 
 
 /* Obtains raw mic sample as unsigned integer for the mentioned channel */
