@@ -32,9 +32,9 @@ bool isCalibrationEnabled()
 
 bool isAlgorithmEnabled()
 {
-	bool calibrationEnabled = false;
+	bool algorithmEnabled = true;
 	/* TODO: perform polling for status */
-	return calibrationEnabled;
+	return algorithmEnabled;
 }
 
 

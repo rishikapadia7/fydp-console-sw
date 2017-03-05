@@ -20,8 +20,11 @@ float convert_rawmic_to_float(rawmic_t data)
 		Also verified matlab audioread function uses similar strategy, our MATLAB simulation used floats in the range of -1 to 1 (not integer).
 	*/
 	float f;
-	/* We subtract 1 to make it zero-centered as opposed to 1-centered */
-	f = ((float) data) /((float) RAWMIC_MAX_VAL) - 1;
+	f = ((float) data) /((float) RAWMIC_MAX_VAL); /* yields f in the range of 0 and 1, centered at 0.5 * /
+
+	/* We subtract 0.5 to make it zero-centered as opposed to 0.5-centered */
+	f = f - 0.5f;
+
 	return f;
 }
 

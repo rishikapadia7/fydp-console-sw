@@ -9,6 +9,7 @@
 #include "math.h"
 #include "stdbool.h"
 #include "stdint.h"
+#include "util.h"
 
 /* Global Constants */
 #define FFT_SIZE 128 /* this is positive and neg freq combined, number of bins */

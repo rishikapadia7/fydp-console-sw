@@ -12,6 +12,7 @@
 #include "fft_wrap.h"
 #include "signal_processing.h"
 
+#define NUM_SIMULATION_CYCLES 400
 
 void runCalibration()
 {
@@ -23,7 +24,7 @@ void runCalibration()
 void runMainAlgorithm()
 {
 	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
-	unsigned int ch, i;
+	unsigned int ch;
 
 	/*Get mic input */
     /*	returns an array of floats, 1 float per mic
@@ -31,8 +32,11 @@ void runMainAlgorithm()
 	*/
 	get_mic_data_float(mic_data_float);
 
+	NORMAL_PRINT("runMainAlgorithm audio_data[01].x[0] = %f, %f \n", audio_data[0].x[0], audio_data[1].x[0]);
 	/* append to working signal to operate on (signal is allocated in common.h) */
 	add_new_mic_data(mic_data_float);
+	NORMAL_PRINT("runMainAlgorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);
+	
 
 	
 	for(ch = 0; ch < AUDIO_CHANNEL_COUNT; ch++)
@@ -44,10 +48,10 @@ void runMainAlgorithm()
 
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
-		/* TODO: validate x == y approximately ... and show error if not*/
-
 
 	}
+	
+	/*NORMAL_PRINT("x value is %f and y value is %f\n", audio_data[0].x[0], audio_data[0].y[0]); */
 	
 	/* TODO: show that mic input and transducer out are roughly the same, and what is the error as a result of float - integer scaling */
 	
@@ -71,6 +75,7 @@ void runMainAlgorithm()
 
 int main()
 {
+	unsigned int iteration_count = 0;
     /*Calibration switch must be enabled at power-on to calibrate
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
     if(isCalibrationEnabled()) 
@@ -80,8 +85,9 @@ int main()
     }
 
 	fft_wrap_init();
+	NORMAL_PRINT("Completed FFT init.\n");
     
-    while(1)
+	while(iteration_count < NUM_SIMULATION_CYCLES)
     {
         /*wait for algorithm to be enabled (controlled by board switch)
         user controls whether regular headphones listening mode, or antivoice mode */
@@ -93,7 +99,9 @@ int main()
         {
             /*sleep to save power if possible / easy? */
         }
-		/*NOTE: we may split up isAlgorithmEnabled into voiceObfuscationEnabled and ancEnabled as they are 2 different modes of operatoin*/
+		/*NOTE: we may split up isAlgorithmEnabled into voiceObfuscationEnabled and ancEnabled as they are 2 different modes of operation*/
+
+		iteration_count++;
     }
     
     return 0;

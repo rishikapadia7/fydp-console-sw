@@ -44,10 +44,13 @@
     <ClInclude Include="stdbool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mock_data.h">
+    <ClInclude Include="signal_processing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="signal_processing.h">
+    <ClInclude Include="mock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

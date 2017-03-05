@@ -38,6 +38,14 @@ unsigned char brev[64] = {
 int rad = 2;
 
 
+float x_tmp_buffer[M + 2 * PAD];
+float * x_tmp_buffer_ptr = x_tmp_buffer + PAD;
+
+float y_tmp_buffer[M + 2 * PAD];
+float * y_tmp_buffer_ptr = y_tmp_buffer + PAD;
+
+
+
 /* Function for generating Specialized sequence of twiddle factors */
 void tw_gen (float *w, int n)
 {
@@ -114,6 +122,7 @@ void fft_wrap_init()
 
 
 /*
+	fft_wrap()
 	fft_wrap_init() must be called before calling this function for the first time.
 	Args:
 		ptr_x is input array
@@ -122,8 +131,15 @@ void fft_wrap_init()
 */
 void fft_wrap(float *ptr_x, float *ptr_y)
 {
+	/* The DSPF_sp_fftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation */
+	/* TODO: need to test if M is correct number of data elements given that PAD many could still be left */
+	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
+
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
-	DSPF_sp_fftSPxSP (FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, FFT_SIZE);
+	DSPF_sp_fftSPxSP (FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
+
+	/* Copy the output to where it needs to be */
+	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);
 }
 
 
@@ -135,8 +151,14 @@ void fft_wrap(float *ptr_x, float *ptr_y)
 
 void ifft_wrap(float *ptr_x, float *ptr_y)
 {
+	/* The DSPF_sp_ifftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation */
+	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
+	
 	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
-	DSPF_sp_ifftSPxSP(FFT_SIZE, &ptr_x[0], &ptr_w[0], ptr_y, brev, rad, 0, FFT_SIZE);
+	DSPF_sp_ifftSPxSP(FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
+
+	/* Copy the output to where it needs to be */
+	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);
 }
 
 #endif /* FFT_WRAP_H */
