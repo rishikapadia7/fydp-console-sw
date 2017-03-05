@@ -8,7 +8,7 @@
 #include "dsplib674x.h"
 #include "mode_of_operation.h"
 #include "mic_input.h"
-#include "transducer_output.h"
+#include "speaker_output.h"
 #include "fft_wrap.h"
 #include "signal_processing.h"
 
@@ -53,7 +53,7 @@ void runMainAlgorithm()
 	
 	/*NORMAL_PRINT("x value is %f and y value is %f\n", audio_data[0].x[0], audio_data[0].y[0]); */
 	
-	/* TODO: show that mic input and transducer out are roughly the same, and what is the error as a result of float - integer scaling */
+	/* TODO: show that mic input and speaker out are roughly the same, and what is the error as a result of float - integer scaling */
 	
 
 
@@ -68,8 +68,8 @@ void runMainAlgorithm()
 	- inverse windowing (to counteract initial input windowing)
 	*/
 	
-    /*Write to transducers*/
-		/* call to transducer_output.h, takes floats as input */
+    /*Write to speakers*/
+		/* call to speaker_output.h, takes floats as input */
 
 }
 

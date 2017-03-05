@@ -97,7 +97,7 @@
     <ClInclude Include="signal_processing.h" />
     <ClInclude Include="stdbool.h" />
     <ClInclude Include="stdint.h" />
-    <ClInclude Include="transducer_output.h" />
+    <ClInclude Include="speaker_output.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
