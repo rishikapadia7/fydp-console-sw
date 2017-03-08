@@ -12,7 +12,9 @@
 #include "util.h"
 
 /* Global Constants */
-#define FFT_SIZE 128 /* this is positive and neg freq combined, number of bins */
+#define FFT_SIZE (128) /* this is positive and neg freq combined, number of bins */
+#define FS (8000) /* In hertz */
+#define FFT_FREQ_MAX (FS / 2) /* In hertz */
 
 typedef enum audio_channel {
 	LEFT = 0,
