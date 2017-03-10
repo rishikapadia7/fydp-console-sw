@@ -98,7 +98,7 @@ int main()
 
     /*Calibration switch must be enabled at power-on to calibrate
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
-    if(isCalibrationEnabled()) 
+    if(is_calibration_enabled()) 
     {
         runCalibration();
         /*TODO: perhaps have a pause here? */
@@ -111,7 +111,7 @@ int main()
     {
         /*wait for algorithm to be enabled (controlled by board switch)
         user controls whether regular headphones listening mode, or antivoice mode */
-        if(isAlgorithmEnabled())
+        if(is_algorithm_enabled())
         {
             runMainAlgorithm(); 
         }
@@ -119,7 +119,7 @@ int main()
         {
             /*sleep to save power if possible / easy? */
         }
-		/*NOTE: we may split up isAlgorithmEnabled into voiceObfuscationEnabled and ancEnabled as they are 2 different modes of operation*/
+		/*NOTE: we may split up is_algorithm_enabled into voiceObfuscationEnabled and ancEnabled as they are 2 different modes of operation*/
 
 		iteration_count++;
     }
