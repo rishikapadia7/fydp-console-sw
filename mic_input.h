@@ -12,6 +12,10 @@ rawmic_t get_rawmic_data(audio_channel_t ch)
 	return	mock_get_mic_input(ch);
 }
 
+#define RAWMIC_UPPER_BOUND (0.8f) /* This is the max value a mic reading can take in float representation.  Note: this reading may be amplified, so it is worthwhile keeping it between 0.7 and 1.0 at most */
+#define RAWMIC_SCALE_DOWN (RAWMIC_MAX_VAL / RAWMIC_UPPER_BOUND) /*Gives resulting float range between 0 and RAWMIC_UPPER_BOUND */
+
+
 float convert_rawmic_to_float(rawmic_t data)
 {
 	/* scaling required for it to be valid FFT input
@@ -20,11 +24,13 @@ float convert_rawmic_to_float(rawmic_t data)
 		Also verified matlab audioread function uses similar strategy, our MATLAB simulation used floats in the range of -1 to 1 (not integer).
 	*/
 	float f;
-	f = ((float) data) /((float) RAWMIC_MAX_VAL); /* yields f in the range of 0 and 1, centered at 0.5 * /
+	/*NOTE: in HW we may find that we are over-dividing here and may want to divide by something like RAWMIC_MAX_VAL/2 */
+	f = ((float) data) /((float) RAWMIC_SCALE_DOWN); /* yields f in the range of 0 and RAWMIC_UPPER_BOUND * /
 
-	/* We subtract 0.5 to make it zero-centered as opposed to 0.5-centered */
-	f = f - 0.5f;
+	/* We make the signal zero-centered so that there can be negative numbers as well*/
+	f = f - RAWMIC_UPPER_BOUND / 2;
 
+	/*f is a value between -RAWMIC_UPPER_BOUND/2 and +RAWMIC_UPPER_BOUND/2 */
 	return f;
 }
 

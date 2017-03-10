@@ -23,6 +23,13 @@ speakerout_t convert_float_to_speakerout(float f)
 	return (speakerout_t) f;
 }
 
+void send_speaker_output(float * data)
+{
+	speakerout_t out_sample = convert_float_to_speakerout(data[SPEAKEROUT_CHOSEN_SAMPLE * 2]);
+
+	/* STUB: Send out_sample to DAC */
+}
+
 
 #endif /* SPEAKER_OUTPUT_H */
 

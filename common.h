@@ -23,10 +23,12 @@ typedef enum audio_channel {
 } audio_channel_t;
 
 typedef uint16_t rawmic_t;
-#define RAWMIC_MAX_VAL (0xFFFF)
+#define RAWMIC_MAX_VAL (0xFFFF) /* assumes 16-bit reading, change to 12-bit max of 0xFFF if using 12-bit */
 
 typedef uint16_t speakerout_t;
 #define SPEAKEROUT_MAX_VAL (0xFFFF)
+
+#define SPEAKEROUT_CHOSEN_SAMPLE 26 /* a value between 0 and (N-1) */
 
 
 /*** Data structures that are used by FFT and iFFT ***/

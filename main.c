@@ -53,11 +53,11 @@ void runMainAlgorithm()
 		fft_wrap(audio_data[ch].x,audio_data[ch].X);
 		/* TODO: perform some signal processing here */
 
-		/* TODO: add benchmarking */
-
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
 
+		/*Write to speakers*/
+		send_speaker_output(audio_data[ch].y);
 	}
 
 #if MATLAB_DEBUG_ENABLED
@@ -72,15 +72,12 @@ void runMainAlgorithm()
 		printf("\n\n\n\n y signal: \n");
 		matlab_float_print_complex(audio_data[0].y, M);
 
+		
+
 	}
 #endif /* MATLAB_DEBUG_ENABLED */
 	
-	/*NORMAL_PRINT("x value is %f and y value is %f\n", audio_data[0].x[0], audio_data[0].y[0]); */
 	
-	/* TODO: show that mic input and speaker out are roughly the same, and what is the error as a result of float - integer scaling */
-	
-
-
     /*Perform signal processing
 	- input signal windowing
 	
@@ -92,8 +89,7 @@ void runMainAlgorithm()
 	- inverse windowing (to counteract initial input windowing)
 	*/
 	
-    /*Write to speakers*/
-		/* call to speaker_output.h, takes floats as input */
+
 
 }
 
