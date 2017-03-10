@@ -12,7 +12,15 @@
 #include "fft_wrap.h"
 #include "signal_processing.h"
 
+#ifndef _TMS320C6X
+#include "matlab_helper.h"
+#endif
+
+#define MATLAB_DEBUG_ENABLED 0
+
+unsigned int iteration_count = 0;
 #define NUM_SIMULATION_CYCLES 400
+
 
 void runCalibration()
 {
@@ -32,10 +40,10 @@ void runMainAlgorithm()
 	*/
 	get_mic_data_float(mic_data_float);
 
-	NORMAL_PRINT("runMainAlgorithm audio_data[01].x[0] = %f, %f \n", audio_data[0].x[0], audio_data[1].x[0]);
+	/*NORMAL_PRINT("runMainAlgorithm audio_data[01].x[0] = %f, %f \n", audio_data[0].x[0], audio_data[1].x[0]);*/
 	/* append to working signal to operate on (signal is allocated in common.h) */
 	add_new_mic_data(mic_data_float);
-	NORMAL_PRINT("runMainAlgorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);
+	/*NORMAL_PRINT("runMainAlgorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);*/
 	
 	/* TODO: perform hilbert transform to make analytical signal */
 
@@ -51,6 +59,21 @@ void runMainAlgorithm()
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
 
 	}
+
+#if MATLAB_DEBUG_ENABLED
+	if(iteration_count == 300)
+	{
+		printf("x signal:\n");
+		matlab_float_print_complex(audio_data[0].x, M);
+		printf("\n\n\n\n X signal: \n");
+		matlab_float_print_complex(audio_data[0].X, M);
+		printf("\n\n\n\n Y signal: \n");
+		matlab_float_print_complex(audio_data[0].Y, M);
+		printf("\n\n\n\n y signal: \n");
+		matlab_float_print_complex(audio_data[0].y, M);
+
+	}
+#endif /* MATLAB_DEBUG_ENABLED */
 	
 	/*NORMAL_PRINT("x value is %f and y value is %f\n", audio_data[0].x[0], audio_data[0].y[0]); */
 	
@@ -76,7 +99,7 @@ void runMainAlgorithm()
 
 int main()
 {
-	unsigned int iteration_count = 0;
+
     /*Calibration switch must be enabled at power-on to calibrate
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
     if(isCalibrationEnabled()) 

@@ -28,7 +28,9 @@ void add_new_mic_data(float mic_data_float[AUDIO_CHANNEL_COUNT])
 void fourier_bpf(float * S, float pass_start, float pass_stop)
 {
 	/* TODO: implement when we have determined how sp_FFT function partitions the signal S, so that we know where particular 
-	frequencies are located in this fourier domain signal. Consider both negative and positive frequencies, and imaginary parts. */
+	frequencies are located in this fourier domain signal. Consider both negative and positive frequencies, and imaginary parts.
+	Should use windowing such as a raised cosine, otherwise will get ringing in the time domain.
+	*/
 }
 
 void fourier_lpf(float *S, float cutoff)

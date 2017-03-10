@@ -53,5 +53,8 @@
     <ClInclude Include="speaker_output.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="matlab_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
