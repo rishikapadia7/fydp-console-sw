@@ -22,14 +22,14 @@ unsigned int iteration_count = 0;
 #define NUM_SIMULATION_CYCLES 400
 
 
-void runCalibration()
+void run_calibration()
 {
     /*TODO: populate calibration data structures.
 	NOTE: if using hardcoded data, then this function returns immediately.
 	*/
 }
 
-void runMainAlgorithm()
+void run_main_algorithm()
 {
 	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
 	unsigned int ch;
@@ -40,10 +40,10 @@ void runMainAlgorithm()
 	*/
 	get_mic_data_float(mic_data_float);
 
-	/*NORMAL_PRINT("runMainAlgorithm audio_data[01].x[0] = %f, %f \n", audio_data[0].x[0], audio_data[1].x[0]);*/
+	/*NORMAL_PRINT("run_main_algorithm audio_data[01].x[0] = %f, %f \n", audio_data[0].x[0], audio_data[1].x[0]);*/
 	/* append to working signal to operate on (signal is allocated in common.h) */
 	add_new_mic_data(mic_data_float);
-	/*NORMAL_PRINT("runMainAlgorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);*/
+	/*NORMAL_PRINT("run_main_algorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);*/
 	
 	/* TODO: perform hilbert transform to make analytical signal */
 
@@ -100,7 +100,7 @@ int main()
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
     if(is_calibration_enabled()) 
     {
-        runCalibration();
+        run_calibration();
         /*TODO: perhaps have a pause here? */
     }
 
@@ -113,7 +113,7 @@ int main()
         user controls whether regular headphones listening mode, or antivoice mode */
         if(is_algorithm_enabled())
         {
-            runMainAlgorithm(); 
+            run_main_algorithm(); 
         }
         else
         {
