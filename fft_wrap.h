@@ -11,6 +11,7 @@
 #ifdef _TMS320C6X
 #pragma DATA_ALIGN(brev, 8);
 #pragma DATA_ALIGN(w, 8);
+#pragma DATA_ALIGN(h_padded, 8);
 #endif /* _TMS320C6X */
 
 /* Contains the twiddle factors used by the FFT radix algorithm. */
@@ -22,6 +23,10 @@
 float w[M + 2 * PAD];
 /* ptr_w will skip beyond the array padding and give useful aspect*/
 float *const ptr_w = w + PAD;
+
+/* Hilbert transform vector */
+float h_padded[M + 2 * PAD];
+float * h = h_padded + PAD;
 
 /* brev is used by this specific butterfly radix algorithm for value lookup */
 unsigned char brev[64] = {
@@ -118,6 +123,44 @@ void fft_wrap_init()
 		audio_data[i].Y = audio_data[i].Y_padded + PAD;
 		audio_data[i].y = audio_data[i].y_padded + PAD;
 	}
+
+	/* Populate hilbert transform vector */
+	memset(h,0,sizeof(float) * M);
+	h[0] = 1;
+	h[MAXN] = 1;
+
+	for(i = 2; i < MAXN; i+=2)
+	{
+		h[i] = 2;
+	}
+}
+
+/*
+	Performs an optimized version of the hilbert transform in-place such that:
+		@X: this signal is in the fourier domain and will be complexified (applied hilbert)
+	and @X is kept in the fourier domain and no ifft is taken.
+	Typically fft and ifft are the first and last steps, and we skip over those as we want to work
+	with the signal in the frequency domain as opposed to time domain.
+
+	Based on Ghanan's implementation:
+		https://github.com/ghanan94/fydp-tests-and-simulations/blob/master/fft_phase_shift_test/src/phase_shift.c
+
+	Essentially this function calculates the element-wise product of X and h (transform vector).
+*/
+void fft_hilbert_transform(float * X)
+{
+	float re;
+	float im;
+	unsigned int i;
+
+	for(i = 0; i < M; i+=2)
+	{
+		re = X[i];
+		im = X[i + 1];
+
+		X[i] = re * h[i] - im * h[i + 1];
+		X[i + 1] = re * h[i + 1] + im * h[i];
+	}
 }
 
 
@@ -131,12 +174,16 @@ void fft_wrap_init()
 */
 void fft_wrap(float *ptr_x, float *ptr_y)
 {
+	memset(x_tmp_buffer_ptr,0,sizeof(float) * M);
+	
 	/* The DSPF_sp_fftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation */
 	/* TODO: need to test if M is correct number of data elements given that PAD many could still be left */
 	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
 
-	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
 	DSPF_sp_fftSPxSP (FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
+
+	/* Perform hilbert transform on signal so that phase adjustments can be applied */
+	fft_hilbert_transform(x_tmp_buffer_ptr);
 
 	/* Copy the output to where it needs to be */
 	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);

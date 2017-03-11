@@ -45,11 +45,10 @@ void run_main_algorithm()
 	add_new_mic_data(mic_data_float);
 	/*NORMAL_PRINT("run_main_algorithm mic_data_float = %f, %f \n", mic_data_float[0], mic_data_float[1]);*/
 	
-	/* TODO: perform hilbert transform to make analytical signal */
-
 	
 	for(ch = 0; ch < AUDIO_CHANNEL_COUNT; ch++)
 	{
+		/* NOTE: hilbert transform is performed by fft_wrap to make analytical signal X*/
 		fft_wrap(audio_data[ch].x,audio_data[ch].X);
 		/* TODO: perform some signal processing here */
 
