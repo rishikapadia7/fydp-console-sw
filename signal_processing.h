@@ -43,7 +43,71 @@ void apply_hpf(float *S, float cutoff)
 	fourier_bpf(S,cutoff,FFT_FREQ_MAX);
 }
 
+/* Populates freq_all with the center frequencies of the FFT frequency domain vectors. */
+void generate_fft_center_frequencies()
+{
+	unsigned int i;
+	float f;
+	float finc = (float) FS / (float) FFT_SIZE;
+	/* This iterates and include f=FS/2. */
+	i = 0;
+	for(f = 0; f <= (float) (FS / 2) + 0.1f ; f += finc)
+	{
+		freq[i] = f;
+		i++;
+	}
+
+	f = -1.0f * (float) (FS / 2);
+	while(i < FFT_SIZE)
+	{
+		f += finc; /*we want to skip over -fs/2 */
+		freq[i] = f;
+		i++;
+	}
+}
+
+
+/*
+	NOTE: latency array must have been populated first, as well as generate_fft_center_frequencies() must have been called.
+inputs:
+%	latency is passed in as seconds
+    freq is a ROW vector representing each frequency bin in hz
+		%0 | positive | (fs/2 freq) | negative reversed
+outputs:
+    phase_adj is in radians, and is a ROW vector corresponding freq input
+*/
+void get_antiphase_vector_all()
+{
+	unsigned int i;
+	float period, periods_elapsed, periods_floor_diff, shift_correction_factor, out_phase_correction;
+	const float PI = (float) 3.14159265;
+	phase_adj[0] = 0;
+	for(i = 0; i < FFT_SIZE; i++)
+	{
+		if(phase_sys[i] > 0)
+		{
+			period = 1 / fabsf(freq[i]);
+            periods_elapsed = phase_sys[i] / period; /*this is the number of periods source is ahead of antisignal */
+            periods_floor_diff = (float) (periods_elapsed - floor(periods_elapsed)); /*number between 0 and 1 */
+
+            /*since source signal is ahead of antisignal by latency seconds, 
+                %0.5 PLUS as opposed to minus is used
+                %Equivalent to 1 - mod(0.5 - periods_floor_diff,1)
+			*/
+            shift_correction_factor = fmodf(0.5f + periods_floor_diff, 1); /*keep positive number between 0 and 1 */
+            out_phase_correction = shift_correction_factor*2*PI;
+            phase_adj[i] = out_phase_correction;
+		}
+		else
+		{
+			phase_adj[i] = PI/2;
+		}
+	}
+}
+
 
 
 #endif /* SIGNAL_PROCESSING_H */
+
+
 

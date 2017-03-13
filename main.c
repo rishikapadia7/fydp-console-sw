@@ -16,7 +16,7 @@
 #include "matlab_helper.h"
 #endif
 
-#define MATLAB_DEBUG_ENABLED 0
+#define MATLAB_DEBUG_ENABLED 1
 
 unsigned int iteration_count = 0;
 #define NUM_SIMULATION_CYCLES 400
@@ -53,6 +53,8 @@ void run_main_algorithm()
 		/* TODO: perform some signal processing here */
 
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
+
+
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
 
 		/*Write to speakers*/

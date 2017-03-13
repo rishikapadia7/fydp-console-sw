@@ -16,6 +16,17 @@
 #define FS (8000) /* In hertz */
 #define FFT_FREQ_MAX (FS / 2) /* In hertz */
 
+/* Global data structures */
+float freq[FFT_SIZE]; /*Gets populated with center frequency of each fft bin */
+
+float phase_sys[FFT_SIZE]; /* Gets populated by the latency experienced by each freq as a result of calibration*/
+float mag_sys[FFT_SIZE]; /* Gets populated by the magnitude experienced by each freq as a result of calibration*/
+
+float phase_adj[FFT_SIZE]; /* Gets populated by the phase adjustment needed by each freq to be antiphase*/
+float mag_adj[FFT_SIZE]; /* Gets populated by the magnitude adjustment needed by each freq for mic-speaker equalization*/
+
+
+
 typedef enum audio_channel {
 	LEFT = 0,
 	RIGHT,

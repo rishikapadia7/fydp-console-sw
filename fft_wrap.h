@@ -183,7 +183,7 @@ void fft_wrap(float *ptr_x, float *ptr_y)
 	DSPF_sp_fftSPxSP (FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
 
 	/* Perform hilbert transform on signal so that phase adjustments can be applied */
-	fft_hilbert_transform(x_tmp_buffer_ptr);
+	fft_hilbert_transform(y_tmp_buffer_ptr);
 
 	/* Copy the output to where it needs to be */
 	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);
