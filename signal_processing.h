@@ -68,15 +68,16 @@ void generate_fft_center_frequencies()
 
 
 /*
-	NOTE: latency array must have been populated first, as well as generate_fft_center_frequencies() must have been called.
+	NOTE: phase_sys[] array must have been populated first,
+	as well as generate_fft_center_frequencies() must have been called.
 inputs:
-%	latency is passed in as seconds
-    freq is a ROW vector representing each frequency bin in hz
-		%0 | positive | (fs/2 freq) | negative reversed
+%	phase_sys is passed in as seconds
+    freq is a vector representing each frequency bin in hz
+		0 | positive | (fs/2 freq) | negative reversed
 outputs:
     phase_adj is in radians, and is a ROW vector corresponding freq input
 */
-void get_antiphase_vector_all()
+void generate_antiphase_vector()
 {
 	unsigned int i;
 	float period, periods_elapsed, periods_floor_diff, shift_correction_factor, out_phase_correction;
@@ -90,7 +91,7 @@ void get_antiphase_vector_all()
             periods_elapsed = phase_sys[i] / period; /*this is the number of periods source is ahead of antisignal */
             periods_floor_diff = (float) (periods_elapsed - floor(periods_elapsed)); /*number between 0 and 1 */
 
-            /*since source signal is ahead of antisignal by latency seconds, 
+            /*since source signal is ahead of antisignal by phase_sys[i] seconds, 
                 %0.5 PLUS as opposed to minus is used
                 %Equivalent to 1 - mod(0.5 - periods_floor_diff,1)
 			*/
@@ -98,14 +99,41 @@ void get_antiphase_vector_all()
             out_phase_correction = shift_correction_factor*2*PI;
             phase_adj[i] = out_phase_correction;
 		}
-		else
+		/*else
 		{
-			phase_adj[i] = PI/2;
+			phase_adj[i] = PI;
 		}
+		*/
 	}
 }
 
+void signal_processing_init()
+{
+	generate_fft_center_frequencies();
+	generate_antiphase_vector();
+	NORMAL_PRINT("Completed signal_processing_init.\n");
+}
 
+/*
+	X is the signal to be applied in-place the phase shift specified at phase_adj[i]
+		for elements X[2*i] and X[2*i + 1] (real and imag)
+*/
+
+void apply_phase_adj(float * X)
+{
+	unsigned int i;
+	float angle, a, x_abs;
+
+	for(i = 0; i < FFT_SIZE; i++)
+	{	
+		angle = (float) atan(X[2*i+1] / X[2*i]);
+		a = angle + phase_adj[i];
+		x_abs = (float) sqrt( pow(X[2*i], 2 ) + pow( X[2*i+1], 2 ) );
+	
+		X[2*i] = x_abs * (float) cos(a);
+		X[2*i+1] = x_abs * (float) sin(a);
+	}
+}
 
 #endif /* SIGNAL_PROCESSING_H */
 

@@ -133,6 +133,7 @@ void fft_wrap_init()
 	{
 		h[i] = 2;
 	}
+	NORMAL_PRINT("Completed FFT init.\n");
 }
 
 /*

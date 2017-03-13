@@ -40,7 +40,7 @@ bool is_algorithm_enabled()
 
 bool is_calibration_enabled()
 {
-	bool calibration_enabled = false;
+	bool calibration_enabled = true;
 	/* TODO: perform polling for status */
 	return calibration_enabled;
 }

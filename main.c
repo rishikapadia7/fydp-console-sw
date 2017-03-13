@@ -16,7 +16,7 @@
 #include "matlab_helper.h"
 #endif
 
-#define MATLAB_DEBUG_ENABLED 1
+#define MATLAB_DEBUG_ENABLED 0
 
 unsigned int iteration_count = 0;
 #define NUM_SIMULATION_CYCLES 400
@@ -24,9 +24,19 @@ unsigned int iteration_count = 0;
 
 void run_calibration()
 {
-    /*TODO: populate calibration data structures.
-	NOTE: if using hardcoded data, then this function returns immediately.
+    unsigned int i;
+	
+	/*Populate calibration data structures.	
+		TODO: perhaps replace this function with a separate header file altogether with an assignment of calibration results to the calibration variables.
+			create calibration.h
 	*/
+	for(i = 0; i < FFT_SIZE; i++)
+	{
+		phase_sys[i] = 0.0001f;
+		mag_sys[i] = 1.0f;
+	}
+
+	NORMAL_PRINT("run_calibration() complete.\n");
 }
 
 void run_main_algorithm()
@@ -50,11 +60,14 @@ void run_main_algorithm()
 	{
 		/* NOTE: hilbert transform is performed by fft_wrap to make analytical signal X*/
 		fft_wrap(audio_data[ch].x,audio_data[ch].X);
-		/* TODO: perform some signal processing here */
-
+		
+		/* copy X to Y, we leave X untouched for debugging purposes */
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
 
+		/* Apply corresponding phase adjustments to Y */
+		apply_phase_adj(audio_data[ch].Y);
 
+		/*Take ifft of Y to get output y in time domain */
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
 
 		/*Write to speakers*/
@@ -72,24 +85,8 @@ void run_main_algorithm()
 		matlab_float_print_complex(audio_data[0].Y, M);
 		printf("\n\n\n\n y signal: \n");
 		matlab_float_print_complex(audio_data[0].y, M);
-
-		
-
 	}
 #endif /* MATLAB_DEBUG_ENABLED */
-	
-	
-    /*Perform signal processing
-	- input signal windowing
-	
-	- magnitude adjustment
-	- phase adjustment
-		- feedback elimination (this will be part of magnitude and phase adjustment and may involve subtraction and not just multiplication)
-		- voice obfuscation (same, but may involve addition and subtraction as well)
-	- ifft (may or may not be able to use previous signal data to reduce computation - research)
-	- inverse windowing (to counteract initial input windowing)
-	*/
-	
 
 
 }
@@ -106,7 +103,7 @@ int main()
     }
 
 	fft_wrap_init();
-	NORMAL_PRINT("Completed FFT init.\n");
+	signal_processing_init();
     
 	while(iteration_count < NUM_SIMULATION_CYCLES)
     {
