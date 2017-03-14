@@ -58,7 +58,7 @@ void run_main_algorithm()
 		fft_wrap(audio_data[ch].x,audio_data[ch].X);
 		
 		/* copy X to Y, we leave X untouched for debugging purposes */
-		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
+		memcpy(audio_data[ch].Y,audio_data[ch].X,  M*sizeof(float));
 
 		/* Apply corresponding phase adjustments to Y */
 		/*TODO: change to apply_mag_phase_adj() once we figure out how to apply mag adjustments properly 

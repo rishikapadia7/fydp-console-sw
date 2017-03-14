@@ -177,7 +177,7 @@ void fft_wrap(float *ptr_x, float *ptr_y)
 	
 	/* The DSPF_sp_fftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation */
 	/* TODO: need to test if M is correct number of data elements given that PAD many could still be left */
-	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
+	memcpy(x_tmp_buffer_ptr,ptr_x,M* sizeof(float));
 
 	DSPF_sp_fftSPxSP (FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
 
@@ -185,7 +185,7 @@ void fft_wrap(float *ptr_x, float *ptr_y)
 	fft_hilbert_transform(y_tmp_buffer_ptr);
 
 	/* Copy the output to where it needs to be */
-	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);
+	memcpy(ptr_y,y_tmp_buffer_ptr,M* sizeof(float));
 }
 
 
@@ -200,13 +200,13 @@ void ifft_wrap(float *ptr_x, float *ptr_y)
 	/* The DSPF_sp_ifftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation 
 		As well, the temporary buffer is data-aligned as the dsplib requires.
 	*/
-	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
+	memcpy(ptr_x,x_tmp_buffer_ptr,M* sizeof(float));
 	
 	/* ifft output is placed in y_tmp_buffer_ptr */
 	DSPF_sp_ifftSPxSP(FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
 
 	/* Copy the output to where it needs to be */
-	DSPF_sp_blk_move(y_tmp_buffer_ptr,ptr_y,M);
+	memcpy(ptr_y,y_tmp_buffer_ptr,M* sizeof(float));
 }
 
 #endif /* FFT_WRAP_H */

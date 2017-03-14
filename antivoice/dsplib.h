@@ -15,14 +15,6 @@
 
 #include "common.h"
 
-/*
-	copies n data words (floats) from input array x to output array y.
-*/
-void DSPF_sp_blk_move(const float * x, float * y, const int n)
-{
-	memcpy(y,x,n * sizeof(float));
-}
-
 
 /* From: C:\Program Files (x86)\Texas Instruments\dsplib_c674x_3_1_0_0\packages\ti\dsplib\src\DSPF_sp_fftSPxSP\c674 */
 /* ======================================================================= */
