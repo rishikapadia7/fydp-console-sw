@@ -10,19 +10,19 @@
 #if USING_ISR
 
 /*TODO: modify these in an ISR if using ISR*/
-volatile static bool_t calibrationEnabled = 0;
-volatile static bool_t algorithmEnabled = 1;
+volatile static bool calibration_enabled = 0;
+volatile static bool algorithm_enabled = 1;
 
 
-bool_t isAlgorithmEnabled()
+bool is_algorithm_enabled()
 {
-	return calibrationEnabled;
+	return calibration_enabled;
 }
 
 
-bool_t isCalibrationEnabled()
+bool is_calibration_enabled()
 {
-	return calibrationEnabled;
+	return calibration_enabled;
 }
 
 
@@ -30,19 +30,19 @@ bool_t isCalibrationEnabled()
 
 #else /* We are using polling */
 
-bool_t isAlgorithmEnabled()
+bool is_algorithm_enabled()
 {
-	bool_t calibrationEnabled = FALSE;
+	bool algorithm_enabled = true;
 	/* TODO: perform polling for status */
-	return calibrationEnabled;
+	return algorithm_enabled;
 }
 
 
-bool_t isCalibrationEnabled()
+bool is_calibration_enabled()
 {
-	bool_t calibrationEnabled = FALSE;
+	bool calibration_enabled = true;
 	/* TODO: perform polling for status */
-	return calibrationEnabled;
+	return calibration_enabled;
 }
 
 #endif /* USING_ISR */
