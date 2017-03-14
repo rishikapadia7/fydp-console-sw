@@ -9,7 +9,7 @@
 #include "math.h"
 #include "stdbool.h"
 #include "stdint.h"
-#include "util.h"
+#include "../util.h"
 
 /* Global Constants */
 #define FFT_SIZE (128) /* this is positive and neg freq combined, number of bins */
@@ -52,32 +52,15 @@ so we want give 16 32-bit floats for the compiler to play around with */
 #define PAD  (16)
 
 
-#ifdef _TMS320C6X
-#pragma DATA_ALIGN(audio_data[LEFT].x_padded, 8);
-#pragma DATA_ALIGN(audio_data[LEFT].X_padded, 8);
-#pragma DATA_ALIGN(audio_data[LEFT].Y_padded, 8);
-#pragma DATA_ALIGN(audio_data[LEFT].y_padded, 8);
-#pragma DATA_ALIGN(audio_data[RIGHT].x_padded, 8);
-#pragma DATA_ALIGN(audio_data[RIGHT].X_padded, 8);
-#pragma DATA_ALIGN(audio_data[RIGHT].Y_padded, 8);
-#pragma DATA_ALIGN(audio_data[RIGHT].y_padded, 8);
-#endif /* _TMS320C6X */
-
 typedef struct audio_data_structures
 {
 	/* Do not access _padded structures directly from application code.
 		Use the convenience ptrs below them.
 	*/
-	float x_padded[M + 2 * PAD]; /* input to fft */
-	float X_padded[M + 2 * PAD]; /* The fft of x */
-	float Y_padded[M + 2 * PAD]; /* Input into ifft */
-	float y_padded[M + 2 * PAD]; /* Output of ifft */
-	
-	/* Below fields are initialized on the first fft call. */
-	float * x; /* = x_padded + PAD */
-	float * X; /* = X_padded + PAD */
-	float * Y; /* = Y_padded + PAD */
-	float * y; /* = y_padded + PAD */
+	float x[M]; /* input to fft */
+	float X[M]; /* The fft of x */
+	float Y[M]; /* Input into ifft */
+	float y[M]; /* Output of ifft */
 } audio_data_t;
 
 audio_data_t audio_data[AUDIO_CHANNEL_COUNT];

@@ -12,6 +12,8 @@
 #pragma DATA_ALIGN(brev, 8);
 #pragma DATA_ALIGN(w, 8);
 #pragma DATA_ALIGN(h_padded, 8);
+#pragma DATA_ALIGN(x_tmp_buffer, 8);
+#pragma DATA_ALIGN(y_tmp_buffer, 8);
 #endif /* _TMS320C6X */
 
 /* Contains the twiddle factors used by the FFT radix algorithm. */
@@ -114,16 +116,12 @@ void fft_wrap_init()
 	
 	for(i = 0; i < AUDIO_CHANNEL_COUNT; i++)
 	{
-		memset(audio_data[i].x_padded, 0, sizeof(audio_data[i].x_padded));
-		memset(audio_data[i].X_padded, 0, sizeof(audio_data[i].X_padded));
-		memset(audio_data[i].Y_padded, 0, sizeof(audio_data[i].Y_padded));
-		memset(audio_data[i].y_padded, 0, sizeof(audio_data[i].y_padded));
-		audio_data[i].x = audio_data[i].x_padded + PAD;
-		audio_data[i].X = audio_data[i].X_padded + PAD;
-		audio_data[i].Y = audio_data[i].Y_padded + PAD;
-		audio_data[i].y = audio_data[i].y_padded + PAD;
+		memset(audio_data[i].x, 0, sizeof(audio_data[i].x));
+		memset(audio_data[i].X, 0, sizeof(audio_data[i].X));
+		memset(audio_data[i].Y, 0, sizeof(audio_data[i].Y));
+		memset(audio_data[i].y, 0, sizeof(audio_data[i].y));
 	}
-
+	
 	/* Populate hilbert transform vector */
 	memset(h,0,sizeof(float) * M);
 	h[0] = 1;
@@ -199,10 +197,12 @@ void fft_wrap(float *ptr_x, float *ptr_y)
 
 void ifft_wrap(float *ptr_x, float *ptr_y)
 {
-	/* The DSPF_sp_ifftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation */
+	/* The DSPF_sp_ifftSPxSP modifies the input x!!! therefore copy to separate buffer instead for computation 
+		As well, the temporary buffer is data-aligned as the dsplib requires.
+	*/
 	DSPF_sp_blk_move(ptr_x,x_tmp_buffer_ptr,M);
 	
-	/* Not sure why they do &ptr_x[0] instead of just ptr_x. */
+	/* ifft output is placed in y_tmp_buffer_ptr */
 	DSPF_sp_ifftSPxSP(FFT_SIZE, &x_tmp_buffer_ptr[0], &ptr_w[0], y_tmp_buffer_ptr, brev, rad, 0, FFT_SIZE);
 
 	/* Copy the output to where it needs to be */

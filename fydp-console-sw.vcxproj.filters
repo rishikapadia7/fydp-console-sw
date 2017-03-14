@@ -29,9 +29,6 @@
     <ClInclude Include="antivoice\fft_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="antivoice\main_algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="antivoice\matlab_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>

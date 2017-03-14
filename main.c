@@ -10,12 +10,9 @@
 #include "antivoice/speaker_output.h"
 #include "antivoice/fft_wrap.h"
 #include "antivoice/signal_processing.h"
-
-#ifndef _TMS320C6X
 #include "antivoice/matlab_helper.h"
-#endif
 
-#define MATLAB_DEBUG_ENABLED 0
+#define MATLAB_DEBUG_ENABLED 1
 
 unsigned int iteration_count = 0;
 #define NUM_SIMULATION_CYCLES 400
