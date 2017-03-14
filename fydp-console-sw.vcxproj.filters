@@ -26,9 +26,6 @@
     <ClInclude Include="antivoice\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="antivoice\dsplib674x.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="antivoice\fft_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="antivoice\stdint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\dsplib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

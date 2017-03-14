@@ -2,7 +2,7 @@
 #define FFT_WRAP_H
 
 #include "common.h"
-#include "dsplib674x.h"
+#include "dsplib.h"
 
 /*
 	This file contains wrapper functions for FFT and iFFT for easily calling DSPLIB functions.

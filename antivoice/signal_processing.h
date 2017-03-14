@@ -2,7 +2,7 @@
 #define SIGNAL_PROCESSING_H
 
 #include "common.h"
-#include "dsplib674x.h"
+#include "dsplib.h"
 
 /* Prepend newest data and discards oldest data from the end of the array */
 void add_new_mic_data(float mic_data_float[AUDIO_CHANNEL_COUNT])

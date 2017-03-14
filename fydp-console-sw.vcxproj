@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="antivoice\common.h" />
-    <ClInclude Include="antivoice\dsplib674x.h" />
+    <ClInclude Include="antivoice\dsplib.h" />
     <ClInclude Include="antivoice\fft_wrap.h" />
     <ClInclude Include="antivoice\main_algorithm.h" />
     <ClInclude Include="antivoice\matlab_helper.h" />
