@@ -82,7 +82,7 @@ void generate_antiphase_vector()
 	unsigned int i;
 	float period, periods_elapsed, periods_floor_diff, shift_correction_factor, out_phase_correction;
 	const float PI = (float) 3.14159265;
-	phase_adj[0] = 0;
+
 	for(i = 0; i < FFT_SIZE; i++)
 	{
 		if(phase_sys[i] > 0)
@@ -126,12 +126,16 @@ void apply_phase_adj(float * X)
 
 	for(i = 0; i < FFT_SIZE; i++)
 	{	
-		angle = (float) atan(X[2*i+1] / X[2*i]);
-		a = angle + phase_adj[i];
-		x_abs = (float) sqrt( pow(X[2*i], 2 ) + pow( X[2*i+1], 2 ) );
+		if(X[2*i] != 0.0f)
+		{
+			angle = (float) atan(X[2*i+1] / X[2*i]);
+			a = angle + phase_adj[i];
+			x_abs = (float) sqrt( pow(X[2*i], 2 ) + pow( X[2*i+1], 2 ) );
 	
-		X[2*i] = x_abs * (float) cos(a);
-		X[2*i+1] = x_abs * (float) sin(a);
+			X[2*i] = x_abs * (float) cos(a);
+			X[2*i+1] = x_abs * (float) sin(a);
+		}
+		
 	}
 }
 

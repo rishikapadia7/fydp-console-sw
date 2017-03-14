@@ -65,6 +65,8 @@ void run_main_algorithm()
 		DSPF_sp_blk_move(audio_data[ch].X, audio_data[ch].Y, M);
 
 		/* Apply corresponding phase adjustments to Y */
+		/*TODO: change to apply_mag_phase_adj() once we figure out how to apply mag adjustments properly 
+			for a complex number in the freq domain */
 		apply_phase_adj(audio_data[ch].Y);
 
 		/*Take ifft of Y to get output y in time domain */
@@ -81,6 +83,10 @@ void run_main_algorithm()
 		matlab_float_print_complex(audio_data[0].x, M);
 		printf("\n\n\n\n X signal: \n");
 		matlab_float_print_complex(audio_data[0].X, M);
+		
+		printf("\n\n\n\n phase_adj signal: \n");
+		matlab_float_print_array(phase_adj, FFT_SIZE);
+
 		printf("\n\n\n\n Y signal: \n");
 		matlab_float_print_complex(audio_data[0].Y, M);
 		printf("\n\n\n\n y signal: \n");
@@ -121,6 +127,8 @@ int main()
 
 		iteration_count++;
     }
-    
+	NORMAL_PRINT("Completed %u simulation iterations (samples).\n", NUM_SIMULATION_CYCLES);
+
+
     return 0;
 }
