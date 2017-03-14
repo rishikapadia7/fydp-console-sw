@@ -4,16 +4,15 @@
 	// style comments are not allowed!
 */
 
-#include "common.h"
-#include "dsplib674x.h"
-#include "mode_of_operation.h"
-#include "mic_input.h"
-#include "speaker_output.h"
-#include "fft_wrap.h"
-#include "signal_processing.h"
+#include "antivoice/common.h"
+#include "antivoice/mode_of_operation.h"
+#include "antivoice/mic_input.h"
+#include "antivoice/speaker_output.h"
+#include "antivoice/fft_wrap.h"
+#include "antivoice/signal_processing.h"
 
 #ifndef _TMS320C6X
-#include "matlab_helper.h"
+#include "antivoice/matlab_helper.h"
 #endif
 
 #define MATLAB_DEBUG_ENABLED 0

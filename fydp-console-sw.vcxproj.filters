@@ -20,40 +20,43 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mode_of_operation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mic_input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dsplib674x.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fft_wrap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdbool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="signal_processing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="speaker_output.h">
+    <ClInclude Include="antivoice\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="matlab_helper.h">
+    <ClInclude Include="antivoice\dsplib674x.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\fft_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\main_algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\matlab_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\mic_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\mock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\mode_of_operation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\signal_processing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\speaker_output.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\stdbool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antivoice\stdint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

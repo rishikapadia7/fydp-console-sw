@@ -88,17 +88,18 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common.h" />
-    <ClInclude Include="dsplib674x.h" />
-    <ClInclude Include="fft_wrap.h" />
-    <ClInclude Include="matlab_helper.h" />
-    <ClInclude Include="mic_input.h" />
-    <ClInclude Include="mock.h" />
-    <ClInclude Include="mode_of_operation.h" />
-    <ClInclude Include="signal_processing.h" />
-    <ClInclude Include="stdbool.h" />
-    <ClInclude Include="stdint.h" />
-    <ClInclude Include="speaker_output.h" />
+    <ClInclude Include="antivoice\common.h" />
+    <ClInclude Include="antivoice\dsplib674x.h" />
+    <ClInclude Include="antivoice\fft_wrap.h" />
+    <ClInclude Include="antivoice\main_algorithm.h" />
+    <ClInclude Include="antivoice\matlab_helper.h" />
+    <ClInclude Include="antivoice\mic_input.h" />
+    <ClInclude Include="antivoice\mock.h" />
+    <ClInclude Include="antivoice\mode_of_operation.h" />
+    <ClInclude Include="antivoice\signal_processing.h" />
+    <ClInclude Include="antivoice\speaker_output.h" />
+    <ClInclude Include="antivoice\stdbool.h" />
+    <ClInclude Include="antivoice\stdint.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
