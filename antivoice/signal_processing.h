@@ -77,7 +77,7 @@ inputs:
 outputs:
     phase_adj is in radians, and is a ROW vector corresponding freq input
 */
-void generate_antiphase_vector()
+void generate_phase_adj()
 {
 	unsigned int i;
 	float period, periods_elapsed, periods_floor_diff, shift_correction_factor, out_phase_correction;
@@ -107,19 +107,35 @@ void generate_antiphase_vector()
 	}
 }
 
+void generate_mag_adj()
+{
+	unsigned int i;
+
+	/* We want the adjustment to be the reciprocal of what the system does to the particular frequency */
+	for(i = 0; i < FFT_SIZE; i++)
+	{
+		mag_adj[i] = (float) 1 / mag_sys[i];
+	}
+}
+
 void signal_processing_init()
 {
 	generate_fft_center_frequencies();
-	generate_antiphase_vector();
+	generate_phase_adj();
+	generate_mag_adj();
 	NORMAL_PRINT("Completed signal_processing_init.\n");
 }
 
 /*
 	X is the signal to be applied in-place the phase shift specified at phase_adj[i]
 		for elements X[2*i] and X[2*i + 1] (real and imag)
+	The magnitude adjustment is also applied both real-part and im-part.  This works because
+	the same scaling is applied to both real and imaginary parts and therefore, does so independently
+	of phase.
+
 */
 
-void apply_phase_adj(float * X)
+void apply_mag_phase_adj(float * X)
 {
 	unsigned int i;
 	float angle, a, x_abs;
@@ -132,8 +148,8 @@ void apply_phase_adj(float * X)
 			a = angle + phase_adj[i];
 			x_abs = (float) sqrt( pow(X[2*i], 2 ) + pow( X[2*i+1], 2 ) );
 	
-			X[2*i] = x_abs * (float) cos(a);
-			X[2*i+1] = x_abs * (float) sin(a);
+			X[2*i] = x_abs * (float) cos(a) * mag_adj[i];
+			X[2*i+1] = x_abs * (float) sin(a) * mag_adj[i];
 		}
 		
 	}

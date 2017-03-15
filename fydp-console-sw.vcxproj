@@ -88,6 +88,7 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="antivoice\antivoice.h" />
     <ClInclude Include="antivoice\common.h" />
     <ClInclude Include="antivoice\dsplib.h" />
     <ClInclude Include="antivoice\fft_wrap.h" />

@@ -56,5 +56,8 @@
     <ClInclude Include="antivoice\dsplib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="antivoice\antivoice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
