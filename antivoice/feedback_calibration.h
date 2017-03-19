@@ -16,8 +16,8 @@ feedback_calib_t feedback_calib_data[FEEDBACK_CALIB_SAMPLES];
 void send_feedback_calibration_to_pc(float a, float f)
 {
 	unsigned int i;
-	NORMAL_PRINT("%f\n",a);
-	NORMAL_PRINT("%f\n",f);
+	NORMAL_PRINT("amplitude=%f\n",a);
+	NORMAL_PRINT("frequency=%f\n",f);
 	NORMAL_PRINT("sent\n",a);
 	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
 	{
@@ -31,8 +31,8 @@ void send_feedback_calibration_to_pc(float a, float f)
 		}
 	}
 
-	NORMAL_PRINT("%f\n",a);
-	NORMAL_PRINT("%f\n",f);
+	NORMAL_PRINT("amplitude=%f\n",a);
+	NORMAL_PRINT("frequency=%f\n",f);
 	NORMAL_PRINT("received\n",a);
 	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
 	{
@@ -54,7 +54,7 @@ float generate_feedback_calibration_float(unsigned int sample_number, float a, f
 	const double PI = 3.141592654;
 
 	arg = 2* PI * ((double) sample_number / (double) FS); 
-	out_float = a * (float) sin (arg);
+	out_float = a * (float) cos (arg); //use cosine so that first sample in feedback is 1 and easily recognizable
 
 	feedback_calib_data[sample_number].sent = out_float;
 	return out_float;
@@ -79,7 +79,7 @@ void collect_feedback_calibration(float a, float f)
 	speakerout_t out_speaker;
 	unsigned int sample_number;
 
-	NORMAL_PRINT("Collect Feedback Calibration start: a = %f f = %f\n",a,f);
+	//NORMAL_PRINT("Collect Feedback Calibration start: a = %f f = %f\n",a,f);
 	
 	for(sample_number = 0; sample_number < (unsigned int) FEEDBACK_CALIB_SAMPLES; sample_number++)
 	{
@@ -97,7 +97,9 @@ void collect_feedback_calibration(float a, float f)
 		////timer wait until a single sample time of 1/FS has elapsed
 		////stop timer
 	}
-	NORMAL_PRINT("Collect Feedback Calibration stop: a = %f f = %f\n",a,f);
+	//NORMAL_PRINT("Collect Feedback Calibration stop: a = %f f = %f\n",a,f);
+
+	
 }
 
 
@@ -115,14 +117,14 @@ void run_feedback_calibration()
 		if(f > MIN_PRACTICAL_FREQ && f < MAX_PRACTICAL_FREQ)
 		{
 			//sweep over different amplitudes
-			for(a = 0.1f; a <= 1.0f; a+=0.1f)
+			for(a = 0.1f; a <= 1.0f; a+=0.01f)
 			{
 				collect_feedback_calibration(a,f);
 				//now, we should send this data to the PC so that it can be stored for analysis
 				send_feedback_calibration_to_pc(a,f);
+				//// Wait 50 ms so that next set starts with silence
 			}
 		}
-		
 	}
 }
 
