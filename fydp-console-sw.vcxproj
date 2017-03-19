@@ -91,6 +91,7 @@
     <ClInclude Include="antivoice\antivoice.h" />
     <ClInclude Include="antivoice\common.h" />
     <ClInclude Include="antivoice\dsplib.h" />
+    <ClInclude Include="antivoice\feedback_calibration.h" />
     <ClInclude Include="antivoice\fft_wrap.h" />
     <ClInclude Include="antivoice\matlab_helper.h" />
     <ClInclude Include="antivoice\mic_input.h" />

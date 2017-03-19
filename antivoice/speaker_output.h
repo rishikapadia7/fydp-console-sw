@@ -23,11 +23,22 @@ speakerout_t convert_float_to_speakerout(float f)
 	return (speakerout_t) f;
 }
 
-void send_speaker_output(float * data)
+void send_speaker_output(audio_data_t audio_data[AUDIO_CHANNEL_COUNT])
 {
-	speakerout_t out_sample = convert_float_to_speakerout(data[SPEAKEROUT_CHOSEN_SAMPLE * 2]);
+	int ret_val;
+	unsigned int ch;
+	speakerout_t out_samples[AUDIO_CHANNEL_COUNT];
+	
+	/*TODO: modify so that both channels are outputted to the speaker simultaneously!!! */
 
-	/* STUB: Send out_sample to DAC */
+	for(ch = 0; ch < AUDIO_CHANNEL_COUNT; ch++)
+	{
+		out_samples[ch] = convert_float_to_speakerout(audio_data[ch].y[SPEAKEROUT_CHOSEN_SAMPLE * 2]);
+
+		/* This adds a Vref/2 DC offset */
+		ret_val = dac_update(ch, out_samples[ch] , 1);
+		ASSERT(ret_val == DAC_OK, "DAC update failed! (%d)\n", ret_val);
+	}
 }
 
 

@@ -34,6 +34,16 @@ rawmic_t mock_get_mic_input(audio_channel_t ch)
 	return (rawmic_t)(val * (RAWMIC_MAX_VAL/ 2));
 }
 
+#ifndef _TMS320C6X
+
+#define DAC_OK 0
+int dac_update(unsigned int ch, unsigned int sample, unsigned int blocking)
+{
+	return DAC_OK;
+}
+
+#endif /* _TMS320C6X */
+
 
 
 #endif /* MOCK_DATA_H */

@@ -16,6 +16,10 @@
 #define FS (8000) /* In hertz */
 #define FFT_FREQ_MAX (FS / 2) /* In hertz */
 
+#define MIN_PRACTICAL_FREQ 150.0f
+#define MAX_PRACTICAL_FREQ 2000.0f
+#define FEEDBACK_CALIB_SAMPLES (1000)
+
 /* Global data structures */
 float freq[FFT_SIZE]; /*Gets populated with center frequency of each fft bin */
 
@@ -36,7 +40,7 @@ typedef enum audio_channel {
 typedef uint16_t rawmic_t;
 #define RAWMIC_MAX_VAL (0xFFFF) /* assumes 16-bit reading, change to 12-bit max of 0xFFF if using 12-bit */
 
-typedef uint16_t speakerout_t;
+typedef uint32_t speakerout_t;
 #define SPEAKEROUT_MAX_VAL (0xFFFF)
 
 #define SPEAKEROUT_CHOSEN_SAMPLE 26 /* a value between 0 and (N-1) */

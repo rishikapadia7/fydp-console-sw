@@ -1,0 +1,131 @@
+#ifndef FEEDBACK_CALIBRATION_H
+#define FEEDBACK_CALIBRATION_H
+
+#include "common.h"
+#include "speaker_output.h"
+#include "mic_input.h"
+
+typedef struct feedback_calib {
+	//both speaker and mic samples are purely real (no imaginary parts)
+	float sent;
+	float received;
+} feedback_calib_t;
+
+feedback_calib_t feedback_calib_data[FEEDBACK_CALIB_SAMPLES];
+
+void send_feedback_calibration_to_pc(float a, float f)
+{
+	unsigned int i;
+	NORMAL_PRINT("%f\n",a);
+	NORMAL_PRINT("%f\n",f);
+	NORMAL_PRINT("sent\n",a);
+	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
+	{
+		if(i == FEEDBACK_CALIB_SAMPLES - 1)
+		{
+			NORMAL_PRINT("%f",feedback_calib_data[i].sent);
+		}
+		else
+		{
+			NORMAL_PRINT("%f,",feedback_calib_data[i].sent);
+		}
+	}
+
+	NORMAL_PRINT("%f\n",a);
+	NORMAL_PRINT("%f\n",f);
+	NORMAL_PRINT("received\n",a);
+	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
+	{
+		if(i == FEEDBACK_CALIB_SAMPLES - 1)
+		{
+			NORMAL_PRINT("%f",feedback_calib_data[i].received);
+		}
+		else
+		{
+			NORMAL_PRINT("%f,",feedback_calib_data[i].received);
+		}
+	}
+}
+
+float generate_feedback_calibration_float(unsigned int sample_number, float a, float f)
+{
+	double arg;
+	float out_float;
+	const double PI = 3.141592654;
+
+	arg = 2* PI * ((double) sample_number / (double) FS); 
+	out_float = a * (float) sin (arg);
+
+	feedback_calib_data[sample_number].sent = out_float;
+	return out_float;
+}
+
+void collect_mic_readings(unsigned int sample_number)
+{
+	float mic_data_float[AUDIO_CHANNEL_COUNT]; /* gets populated with newest mic samples as float */
+	
+	/* Gets the reading from the microphone */
+	get_mic_data_float(mic_data_float);
+
+	feedback_calib_data[sample_number].received = mic_data_float[LEFT];
+}
+
+
+/* f is the frequency to generate tone at and a is the amplitude */
+void collect_feedback_calibration(float a, float f)
+{
+	int ret_val;
+	float out_float;
+	speakerout_t out_speaker;
+	unsigned int sample_number;
+
+	NORMAL_PRINT("Collect Feedback Calibration start: a = %f f = %f\n",a,f);
+	
+	for(sample_number = 0; sample_number < (unsigned int) FEEDBACK_CALIB_SAMPLES; sample_number++)
+	{
+		////timerstart
+
+		//collect microphone reading into calibration data structure
+		collect_mic_readings(sample_number);
+
+		//send to speaker (and records the generated/sent float in the calibration data structure)
+		out_float = generate_feedback_calibration_float(sample_number, a,f);
+		out_speaker = convert_float_to_speakerout(out_float);
+		ret_val = dac_update(LEFT, out_speaker, 1);
+		ASSERT(ret_val == DAC_OK, "DAC update failed! (%d)\n", ret_val);
+		
+		////timer wait until a single sample time of 1/FS has elapsed
+		////stop timer
+	}
+	NORMAL_PRINT("Collect Feedback Calibration stop: a = %f f = %f\n",a,f);
+}
+
+
+void run_feedback_calibration()
+{
+	/* Implement a per frequency, amplitude sweep */
+	unsigned int i;
+	float f, a;
+
+	for(i = 0; i < FFT_SIZE; i++)
+	{
+		f = freq[i];
+		//we only need to do this for the positive frequencies
+		//and the frequencies our speakers respond well to or we care about
+		if(f > MIN_PRACTICAL_FREQ && f < MAX_PRACTICAL_FREQ)
+		{
+			//sweep over different amplitudes
+			for(a = 0.1f; a <= 1.0f; a+=0.1f)
+			{
+				collect_feedback_calibration(a,f);
+				//now, we should send this data to the PC so that it can be stored for analysis
+				send_feedback_calibration_to_pc(a,f);
+			}
+		}
+		
+	}
+}
+
+
+#endif /* FEEDBACK_CALIBRATION_H */
+

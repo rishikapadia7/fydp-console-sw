@@ -9,6 +9,7 @@
 #include "fft_wrap.h"
 #include "signal_processing.h"
 #include "matlab_helper.h"
+#include "feedback_calibration.h"
 
 #define MATLAB_DEBUG_ENABLED 1
 
@@ -58,17 +59,15 @@ void run_main_algorithm()
 		/* copy X to Y, we leave X untouched for debugging purposes */
 		memcpy(audio_data[ch].Y,audio_data[ch].X,  M*sizeof(float));
 
-		/* Apply corresponding phase adjustments to Y */
-		/*TODO: change to apply_mag_phase_adj() once we figure out how to apply mag adjustments properly 
-			for a complex number in the freq domain */
+		/* Apply corresponding mag & phase adjustments to Y */
 		apply_mag_phase_adj(audio_data[ch].Y);
 
 		/*Take ifft of Y to get output y in time domain */
 		ifft_wrap(audio_data[ch].Y,audio_data[ch].y);
-
-		/*Write to speakers*/
-		send_speaker_output(audio_data[ch].y);
 	}
+	
+	/*Write to speakers*/
+	send_speaker_output(audio_data);
 
 #if MATLAB_DEBUG_ENABLED
 	if(iteration_count == 300)
