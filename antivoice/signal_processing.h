@@ -67,6 +67,42 @@ void generate_fft_center_frequencies()
 }
 
 
+unsigned int get_fft_bin_by_freq_pos(float f)
+{
+	unsigned int i;
+	float fdelta = ((float) FS / (float) FFT_SIZE)/2 + 1;
+
+	for(i = 0; i < FFT_SIZE / 2; i++)
+	{
+		if(fabsf(freq[i] - f) < fdelta)
+		{
+			/* We found the freq bin */
+			return i;
+		}
+	}
+	NORMAL_PRINT("Could not find freq position.\n");
+	return 0;
+}
+
+unsigned int get_fft_bin_by_freq_neg(float f)
+{
+	unsigned int i;
+	float fdelta = ((float) FS / (float) FFT_SIZE)/2 + 1;
+
+	for(i = FFT_SIZE/2; i < FFT_SIZE; i++)
+	{
+		if(fabsf(freq[i] - f) < fdelta)
+		{
+			/* We found the freq bin */
+			return i;
+		}
+	}
+	NORMAL_PRINT("Could not find freq position.\n");
+	return 0;
+}
+
+
+
 /*
 	NOTE: phase_sys[] array must have been populated first,
 	as well as generate_fft_center_frequencies() must have been called.

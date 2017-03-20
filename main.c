@@ -8,6 +8,9 @@
 
 int main()
 {
+	
+	fft_wrap_init();
+	signal_processing_init();
 
     /*Calibration switch must be enabled at power-on to calibrate
     switch does not have effect during normal mode of operation (likely accidental if switched)*/
@@ -15,10 +18,11 @@ int main()
     {
         run_calibration();
         /*TODO: perhaps have a pause here? */
+
+		run_feedback_calibration();
     }
 
-	fft_wrap_init();
-	signal_processing_init();
+
     
 	while(iteration_count < NUM_SIMULATION_CYCLES)
     {

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "speaker_output.h"
 #include "mic_input.h"
+#include "signal_processing.h"
 
 typedef struct feedback_calib {
 	//both speaker and mic samples are purely real (no imaginary parts)
@@ -16,8 +17,8 @@ feedback_calib_t feedback_calib_data[FEEDBACK_CALIB_SAMPLES];
 void send_feedback_calibration_to_pc(float a, float f)
 {
 	unsigned int i;
-	NORMAL_PRINT("amplitude=%f\n",a);
-	NORMAL_PRINT("frequency=%f\n",f);
+	NORMAL_PRINT("amp_index=%u\n",(unsigned int)(a*100));
+	NORMAL_PRINT("freq_index=%u\n",get_fft_bin_by_freq_pos(fabsf(f)));
 	NORMAL_PRINT("sent\n",a);
 	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
 	{
@@ -31,8 +32,6 @@ void send_feedback_calibration_to_pc(float a, float f)
 		}
 	}
 
-	NORMAL_PRINT("amplitude=%f\n",a);
-	NORMAL_PRINT("frequency=%f\n",f);
 	NORMAL_PRINT("received\n",a);
 	for(i=0; i < FEEDBACK_CALIB_SAMPLES; i++)
 	{
@@ -53,8 +52,8 @@ float generate_feedback_calibration_float(unsigned int sample_number, float a, f
 	float out_float;
 	const double PI = 3.141592654;
 
-	arg = 2* PI * ((double) sample_number / (double) FS); 
-	out_float = a * (float) cos (arg); //use cosine so that first sample in feedback is 1 and easily recognizable
+	arg = 2* PI * (double) f * ((double) sample_number / (double) FS); 
+	out_float = (float)((double)a * (float) cos (arg)); //use cosine so that first sample in feedback is 1 and easily recognizable
 
 	feedback_calib_data[sample_number].sent = out_float;
 	return out_float;
